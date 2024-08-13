@@ -1,16 +1,30 @@
 import express from 'express';
 import { connectMongoDB } from './connect';
+import dotenv from 'dotenv';
+import appliedJobRoutes from './routes/appliedJobRoutes';
 
-const DB_CONNECTION_STRING =
-  'mongodb+srv://saharulit:34iyjFvEzjzs1PbE@backenddb.qluby.mongodb.net/?retryWrites=true&w=majority&appName=backendDB';
+// Load environment variables from .env file
+dotenv.config();
+
+// Access environment variables
+const DB_CONNECTION_STRING = process.env.DB_CONNECTION_STRING || '';
+const PORT = process.env.PORT || 3000;
+
 const app = express();
+app.use(express.json()); // Middleware to parse JSON
 
-app.listen('3000', () => {
-  console.log('Server is running on port 3000');
-});
-
+// Connect to MongoDB
 connectMongoDB(DB_CONNECTION_STRING);
 
+// Use the imported routes
+app.use('/api', appliedJobRoutes);
+
+// Test route
 app.get('/', (req, res) => {
-  res.send('hey from server 22');
+  res.send('Hey from server');
+});
+
+// Start the server
+app.listen(PORT, () => {
+  console.log(`Server is running on port ${PORT}`);
 });
