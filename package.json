@@ -5,9 +5,9 @@
   "main": "index.js",
   "scripts": {
     "build": "tsc",
-    "start": "ts-node index.ts",
-    "serve": "ts-node index.ts",
-    "dev": "nodemon index.ts"
+    "start": "ts-node server.ts",
+    "serve": "ts-node server.ts",
+    "dev": "nodemon server.ts"
   },
   "keywords": [],
   "author": "",
