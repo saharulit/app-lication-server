@@ -21,7 +21,7 @@ app.use('/api', appliedJobRoutes);
 
 // Test route
 app.get('/', (req, res) => {
-  res.send('Hey from server');
+  res.send('Hey from the server !');
 });
 
 // Start the server
