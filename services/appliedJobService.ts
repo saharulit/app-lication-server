@@ -5,12 +5,13 @@ export const createJobApplication = async (jobData: any) => {
   const appliedJob = new AppliedJobModel(jobData);
   return await appliedJob.save();
 };
-/*
+
 // Service to get all job applications
 export const fetchAllJobs = async () => {
-  return await AppliedJobModel.find().populate('company');
+  return await AppliedJobModel.find();
 };
 
+/*
 // Service to get a job application by ID
 export const fetchJobById = async (jobId: string) => {
   return await AppliedJobModel.findById(jobId).populate('company');

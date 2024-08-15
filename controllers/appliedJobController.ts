@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
 import { AppliedJobModel } from '../models/appliedJob.model';
-import { createJobApplication } from '../services/appliedJobService';
+import { createJobApplication, fetchAllJobs } from '../services/appliedJobService';
 
 // Create a new job application
 export const createAppliedJob = async (req: Request, res: Response) => {
@@ -12,17 +12,17 @@ export const createAppliedJob = async (req: Request, res: Response) => {
     res.status(500).json({ error: 'Failed to create job application' });
   }
 };
-/*
+
 // Get all job applications
 export const getAppliedJobs = async (req: Request, res: Response) => {
   try {
-    const jobs = await AppliedJobModel.find().populate('company');
+    const jobs = await fetchAllJobs()
     res.status(200).json(jobs);
   } catch (error) {
     res.status(500).json({ error: 'Failed to fetch job applications' });
   }
 };
-
+/*
 // Get a single job application by ID
 export const getAppliedJobById = async (req: Request, res: Response) => {
   try {
