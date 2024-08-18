@@ -1,7 +1,10 @@
 import express from 'express';
 import { connectMongoDB } from './connect';
 import dotenv from 'dotenv';
+import cookieParser from 'cookie-parser';
 import appliedJobRoutes from './routes/appliedJobRoutes';
+import authenticationRoute from './routes/authenticationRoute';
+import protectedRoutes from './routes/protected.routes';
 
 dotenv.config();
 
@@ -13,7 +16,13 @@ app.use(express.json());
 
 connectMongoDB(DB_CONNECTION_STRING);
 
-app.use('/api', appliedJobRoutes);
+// Middleware
+app.use(express.json()); // Parse JSON bodies
+app.use(cookieParser()); // Parse cookies
+
+// Routes
+app.use('/api/auth', authenticationRoute);
+app.use('/api', protectedRoutes);
 
 // Test route
 app.get('/', (req, res) => {

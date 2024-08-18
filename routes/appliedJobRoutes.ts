@@ -7,10 +7,10 @@ import {
 const router = Router();
 
 // Route to create a new job application
-router.post('/applied-jobs', createAppliedJob);
+router.post('/create', createAppliedJob);
 
 // Route to get all job applications
-router.get('/applied-jobs', getAppliedJobs);
+router.get('/', getAppliedJobs);
 /*
 // Route to get a specific job application by ID
 router.get('/applied-jobs/:id', getAppliedJobById);

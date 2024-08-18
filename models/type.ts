@@ -1,3 +1,11 @@
+export interface IUser extends Document {
+  username: string;
+  email: string;
+  password: string;
+  createdAt: Date;
+  updatedAt: Date;
+  comparePassword: (password: string) => Promise<boolean>;
+}
 export interface ICompany extends Document {
   userId: string;
   name: string;
