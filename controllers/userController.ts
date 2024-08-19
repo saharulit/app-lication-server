@@ -8,7 +8,7 @@ export const createUser = async (
   res: Response
 ): Promise<Response> => {
   try {
-    const { username, email, password } = req.body;
+    const { firstName, lastName, email, password } = req.body;
 
     // Check if the user already exists
     const existingUser = await User.findOne({ email });
@@ -17,7 +17,7 @@ export const createUser = async (
     }
 
     // Create a new user
-    const newUser = new User({ username, email, password });
+    const newUser = new User({ firstName, lastName, email, password });
     await newUser.save();
 
     return res.status(201).json(newUser);
@@ -52,11 +52,11 @@ export const updateUser = async (
 ): Promise<Response> => {
   try {
     const userId = req.params.id;
-    const { username, email, password } = req.body;
+    const { firstName, lastName, email, password } = req.body;
 
     const updatedUser = await User.findByIdAndUpdate(
       userId,
-      { username, email, password },
+      { firstName, lastName, email, password },
       { new: true }
     );
 
