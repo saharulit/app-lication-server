@@ -59,7 +59,7 @@ export const loginUser = async (
     }
 
     const token = generateToken(user._id.toString());
-    console.log('user match - success login');
+    console.log(`user token ${token}`);
     // Set the JWT as a cookie
     // res.cookie('token', token, {
     //   httpOnly: true,
