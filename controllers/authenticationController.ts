@@ -41,32 +41,27 @@ export const loginUser = async (
   res: Response
 ): Promise<Response> => {
   try {
-    console.log('starting login');
     const { email, password } = req.body;
-    let user;
-    try {
-      user = await User.findOne({ email });
-      if (!user) {
-        return res.status(400).json({ message: 'Invalid credentials' });
-      }
-    } catch (e) {
-      return res.status(400).json({ message: `faild to find user ${e}` });
+
+    const user = await User.findOne({ email });
+    if (!user) {
+      return res.status(400).json({ message: 'Invalid credentials' });
     }
-    console.log(`find user ${user?.email}`);
+
     const isMatch = await user.comparePassword(password);
     if (!isMatch) {
       return res.status(400).json({ message: 'Invalid credentials' });
     }
 
     const token = generateToken(user._id.toString());
-    console.log(`user token ${token}`);
+
     // Set the JWT as a cookie
-    // res.cookie('token', token, {
-    //   httpOnly: true,
-    //   secure: process.env.NODE_ENV === 'production',
-    //   sameSite: 'strict',
-    //   maxAge: 60 * 60 * 1000,
-    // });
+    res.cookie('token', token, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: 'strict',
+      maxAge: 60 * 60 * 1000,
+    });
 
     return res.status(200).json({ user });
   } catch (error) {
