@@ -59,8 +59,6 @@ export const loginUser = async (
     res.cookie('token', token, {
       httpOnly: true,
       secure: true, // Set Secure flag if in production
-      sameSite: 'strict', // Helps against CSRF attacks
-      // sameSite: 'lax',
       maxAge: 60 * 60 * 1000,
     });
 
