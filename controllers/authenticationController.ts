@@ -61,12 +61,12 @@ export const loginUser = async (
     const token = generateToken(user._id.toString());
     console.log('user match - success login');
     // Set the JWT as a cookie
-    res.cookie('token', token, {
-      httpOnly: true,
-      secure: process.env.NODE_ENV === 'production',
-      sameSite: 'strict',
-      maxAge: 60 * 60 * 1000,
-    });
+    // res.cookie('token', token, {
+    //   httpOnly: true,
+    //   secure: process.env.NODE_ENV === 'production',
+    //   sameSite: 'strict',
+    //   maxAge: 60 * 60 * 1000,
+    // });
 
     return res.status(200).json({ user });
   } catch (error) {
