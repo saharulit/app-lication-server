@@ -61,8 +61,8 @@ export const loginUser = async (
       secure: true, // Set Secure flag if in production
       maxAge: 60 * 60 * 1000,
     });
-
-    return res.status(200).json({ user });
+    console.log(`token: ${token}`);
+    return res.status(200).json({ user, token });
   } catch (error) {
     return res.status(500).json({ message: 'Error logging in', error });
   }
@@ -70,6 +70,7 @@ export const loginUser = async (
 
 // Generate JWT
 const generateToken = (id: string): string => {
+  console.log(`process.env.JWT_SECRET: ${process.env.JWT_SECRET}`);
   return jwt.sign({ id }, process.env.JWT_SECRET as string, {
     expiresIn: '1h',
   });
