@@ -43,12 +43,16 @@ export const loginUser = async (
   try {
     console.log('starting login');
     const { email, password } = req.body;
-
-    const user = await User.findOne({ email });
-    if (!user) {
-      return res.status(400).json({ message: 'Invalid credentials' });
+    let user;
+    try {
+      user = await User.findOne({ email });
+      if (!user) {
+        return res.status(400).json({ message: 'Invalid credentials' });
+      }
+    } catch (e) {
+      return res.status(400).json({ message: `faild to find user ${e}` });
     }
-
+    console.log(`find user ${user?.email}`);
     const isMatch = await user.comparePassword(password);
     if (!isMatch) {
       return res.status(400).json({ message: 'Invalid credentials' });
