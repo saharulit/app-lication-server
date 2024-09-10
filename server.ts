@@ -1,6 +1,7 @@
 import express from 'express';
 import { connectMongoDB } from './connect';
 import dotenv from 'dotenv';
+import cors from 'cors';
 import cookieParser from 'cookie-parser';
 import appliedJobRoutes from './routes/appliedJobRoutes';
 import authenticationRoute from './routes/authenticationRoute';
@@ -19,6 +20,14 @@ connectMongoDB(DB_CONNECTION_STRING);
 // Middleware
 app.use(express.json()); // Parse JSON bodies
 app.use(cookieParser()); // Parse cookies
+app.use(
+  cors({
+    origin: ['http://localhost:5173', 'https://saharulit.github.io'],
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+    allowedHeaders: ['Content-Type', 'Authorization'],
+    credentials: true,
+  })
+);
 
 // Routes
 app.use('/api/auth', authenticationRoute);
