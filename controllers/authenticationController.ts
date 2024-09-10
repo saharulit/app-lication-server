@@ -58,7 +58,7 @@ export const loginUser = async (
     // Set the JWT as a cookie
     res.cookie('token', token, {
       httpOnly: true,
-      secure: process.env.NODE_ENV === 'production',
+      secure: false,
       sameSite: 'lax',
       maxAge: 60 * 60 * 1000,
     });
