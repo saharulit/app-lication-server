@@ -41,6 +41,7 @@ export const loginUser = async (
   res: Response
 ): Promise<Response> => {
   try {
+    console.log('starting login');
     const { email, password } = req.body;
 
     const user = await User.findOne({ email });
