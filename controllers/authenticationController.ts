@@ -59,7 +59,7 @@ export const loginUser = async (
     res.cookie('token', token, {
       httpOnly: true,
       secure: process.env.NODE_ENV === 'production', // Set to true only in production
-      sameSite: 'lax', // Or 'strict', depending on your needs
+      sameSite: false,
       maxAge: 60 * 60 * 1000, // 1 hour
     });
 
