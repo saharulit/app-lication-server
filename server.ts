@@ -22,7 +22,7 @@ app.use(express.json()); // Parse JSON bodies
 app.use(cookieParser()); // Parse cookies
 app.use(
   cors({
-    origin: ['http://localhost:5173', 'https://saharulit.github.io'],
+    origin: ['http://localhost:5173', 'https://app-lication.vercel.app'],
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
     allowedHeaders: ['Content-Type', 'Authorization'],
     credentials: true,
