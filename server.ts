@@ -29,7 +29,7 @@ app.use(
     credentials: true,
   })
 );
-
+app.set('trust proxy', true);
 // Routes
 app.use('/api/auth', authenticationRoute);
 // app.use('/api', protectedRoutes);
