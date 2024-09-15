@@ -25,11 +25,12 @@ app.use(
   cors({
     origin: ['http://localhost:5173', 'https://app-lication.vercel.app'],
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-    allowedHeaders: ['Content-Type', 'Authorization'],
+    allowedHeaders: ['Content-Type', 'Authorization', 'Cookie'],
     credentials: true,
   })
 );
 app.set('trust proxy', true);
+
 // Routes
 app.use('/api/auth', authenticationRoute);
 // app.use('/api', protectedRoutes);
