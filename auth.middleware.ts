@@ -12,15 +12,10 @@ export const authenticate = async (
   res: Response,
   next: NextFunction
 ): Promise<void> => {
-  console.log(`authenticate!`);
-  console.log(
-    `req details authenticate stringify: ${JSON.stringify(req.cookies)}`
-  );
-  console.log(`process.env.NODE_ENV: ${process.env.NODE_ENV}`);
   const token = req.cookies.token;
   if (!token) {
     res.status(401).json({ message: 'Not authorized, no token!' });
-    return; // Ensure that you return after sending a response
+    return;
   }
 
   try {
@@ -41,34 +36,3 @@ export const authenticate = async (
     res.status(401).json({ message: 'Not authorized, token failed' });
   }
 };
-
-// export const authenticate = async (
-//   req: AuthRequest,
-//   res: Response,
-//   next: NextFunction
-// ): Promise<void> => {
-//   const authHeader = req.headers['authorization'];
-//   const token = authHeader && authHeader.split(' ')[1]; // Bearer <token>
-
-//   if (!token) {
-//     res.status(401).json({ message: 'Not authorized, no token' });
-//     return; // Ensure that you return after sending a response
-//   }
-//   try {
-//     const decoded = jwt.verify(token, process.env.JWT_SECRET as string) as {
-//       id: string;
-//     };
-
-//     // Attach the user to the request object
-//     const user = await User.findById(decoded.id).select('-password').exec();
-
-//     if (user) {
-//       req.user = user;
-//       next();
-//     } else {
-//       res.status(401).json({ message: 'Not authorized, user not found' });
-//     }
-//   } catch (error) {
-//     res.status(401).json({ message: 'Not authorized, token failed' });
-//   }
-// };

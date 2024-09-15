@@ -18,9 +18,8 @@ app.use(express.json());
 
 connectMongoDB(DB_CONNECTION_STRING);
 
-// Middleware
-app.use(express.json()); // Parse JSON bodies
-app.use(cookieParser()); // Parse cookies
+app.use(express.json());
+app.use(cookieParser());
 app.use(
   cors({
     origin: ['http://localhost:5173', 'https://app-lication.vercel.app'],
@@ -29,11 +28,11 @@ app.use(
     credentials: true,
   })
 );
-app.set('trust proxy', true);
+// app.set('trust proxy', true);
+// app.use('/api', protectedRoutes);
 
 // Routes
 app.use('/api/auth', authenticationRoute);
-// app.use('/api', protectedRoutes);
 app.use('/api/applied-jobs', authenticate, appliedJobRoutes);
 
 // Test route
