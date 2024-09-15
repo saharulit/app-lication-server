@@ -6,6 +6,7 @@ import cookieParser from 'cookie-parser';
 import appliedJobRoutes from './routes/appliedJobRoutes';
 import authenticationRoute from './routes/authenticationRoute';
 import protectedRoutes from './routes/protected.routes';
+import { authenticate } from './auth.middleware';
 
 dotenv.config();
 
@@ -31,7 +32,8 @@ app.use(
 
 // Routes
 app.use('/api/auth', authenticationRoute);
-app.use('/api', protectedRoutes);
+// app.use('/api', protectedRoutes);
+app.use('/api/applied-jobs', authenticate, appliedJobRoutes);
 
 // Test route
 app.get('/', (req, res) => {

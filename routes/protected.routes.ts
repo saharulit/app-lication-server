@@ -4,6 +4,6 @@ import appliedJobRoutes from './appliedJobRoutes';
 
 const router = Router();
 
-router.use('/applied-jobs', authenticate, appliedJobRoutes);
+// router.use('/applied-jobs', authenticate, appliedJobRoutes);
 
 export default router;
