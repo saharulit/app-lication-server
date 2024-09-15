@@ -16,7 +16,7 @@ export const authenticate = async (
   console.log(
     `req details authenticate stringify: ${JSON.stringify(req.cookies)}`
   );
-
+  console.log(`process.env.NODE_ENV: ${process.env.NODE_ENV}`);
   const token = req.cookies.token;
   if (!token) {
     res.status(401).json({ message: 'Not authorized, no token!' });
