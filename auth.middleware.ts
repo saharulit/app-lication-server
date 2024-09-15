@@ -13,7 +13,10 @@ export const authenticate = async (
   next: NextFunction
 ): Promise<void> => {
   console.log(`authenticate!`);
-  // console.log(`req details authenticate: ${JSON.stringify(req)}`);
+  console.log(
+    `req details authenticate stringify: ${JSON.stringify(req.cookies)}`
+  );
+
   const token = req.cookies.token;
   if (!token) {
     res.status(401).json({ message: 'Not authorized, no token!' });
