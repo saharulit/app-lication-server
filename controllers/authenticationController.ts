@@ -3,7 +3,6 @@ import jwt from 'jsonwebtoken';
 import User from '../models/user.modal';
 import { IUser } from '../models/type';
 
-// Register a new user
 export const registerUser = async (
   req: Request,
   res: Response
@@ -21,12 +20,11 @@ export const registerUser = async (
 
     const token = generateToken(newUser._id.toString());
 
-    // Set the JWT as a cookie
     res.cookie('token', token, {
-      httpOnly: true, // Prevent access via JavaScript
-      secure: process.env.NODE_ENV === 'production', // Set Secure flag if in production
-      sameSite: 'strict', // Helps against CSRF attacks
-      maxAge: 60 * 60 * 1000, // 1 hour in milliseconds
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'strict',
+      maxAge: 60 * 60 * 1000, // 1 hour
     });
 
     return res.status(201).json({ user: newUser });
@@ -35,7 +33,6 @@ export const registerUser = async (
   }
 };
 
-// Login user
 export const loginUser = async (
   req: Request,
   res: Response
@@ -55,11 +52,10 @@ export const loginUser = async (
 
     const token = generateToken(user._id.toString());
 
-    // Set the JWT as a cookie
     res.cookie('token', token, {
       httpOnly: true,
-      secure: process.env.NODE_ENV === 'production', // Set to true only in production
-      sameSite: 'none',
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'strict',
       maxAge: 60 * 60 * 1000, // 1 hour
     });
 
@@ -69,7 +65,23 @@ export const loginUser = async (
   }
 };
 
-// Generate JWT
+export const logoutUser = async (
+  req: Request,
+  res: Response
+): Promise<Response> => {
+  try {
+    res.clearCookie('token', {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'strict',
+    });
+
+    return res.status(200).json({ message: 'Logout successful' });
+  } catch (error) {
+    return res.status(500).json({ message: 'Error logging out', error });
+  }
+};
+
 const generateToken = (id: string): string => {
   return jwt.sign({ id }, process.env.JWT_SECRET as string, {
     expiresIn: '1h',
