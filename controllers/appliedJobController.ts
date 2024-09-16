@@ -10,7 +10,7 @@ export const createAppliedJob = async (req: Request, res: Response) => {
   try {
     //search for company or create if not have one
     const authReq = req as Request & { user: IUser };
-    const userId = authReq.user?._id;
+    const userId = authReq.user?.id;
     const savedJob = await createJobApplication(req.body, userId);
     res.status(201).json(savedJob);
   } catch (error) {
@@ -21,7 +21,7 @@ export const createAppliedJob = async (req: Request, res: Response) => {
 export const getUserAppliedJobs = async (req: Request, res: Response) => {
   try {
     const authReq = req as Request & { user: IUser };
-    const userId = authReq.user?._id;
+    const userId = authReq.user?.id;
     const jobs = await fetchUserAppliedJobs(userId);
     res.status(200).json(jobs);
   } catch (error) {
