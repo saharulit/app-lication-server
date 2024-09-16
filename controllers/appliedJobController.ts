@@ -1,22 +1,28 @@
 import { Request, Response } from 'express';
 import { AppliedJobModel } from '../models/appliedJob.model';
-import { createJobApplication, fetchAllJobs } from '../services/appliedJobService';
+import {
+  createJobApplication,
+  fetchUserAppliedJobs,
+} from '../services/appliedJobService';
+import { IUser } from '../models/type';
 
-// Create a new job application
 export const createAppliedJob = async (req: Request, res: Response) => {
-  console.log(req.body);
   try {
-    const savedJob = await createJobApplication(req.body);
+    //search for company or create if not have one
+    const authReq = req as Request & { user: IUser };
+    const userId = authReq.user?._id;
+    const savedJob = await createJobApplication(req.body, userId);
     res.status(201).json(savedJob);
   } catch (error) {
     res.status(500).json({ error: 'Failed to create job application' });
   }
 };
 
-// Get all job applications
-export const getAppliedJobs = async (req: Request, res: Response) => {
+export const getUserAppliedJobs = async (req: Request, res: Response) => {
   try {
-    const jobs = await fetchAllJobs()
+    const authReq = req as Request & { user: IUser };
+    const userId = authReq.user?._id;
+    const jobs = await fetchUserAppliedJobs(userId);
     res.status(200).json(jobs);
   } catch (error) {
     res.status(500).json({ error: 'Failed to fetch job applications' });

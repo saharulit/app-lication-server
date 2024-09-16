@@ -1,16 +1,17 @@
 import { AppliedJobModel } from '../models/appliedJob.model';
 
-// Service to create a new job application
-export const createJobApplication = async (jobData: any) => {
-  const appliedJob = new AppliedJobModel(jobData);
+export const createJobApplication = async (jobData: any, userId: string) => {
+  const appliedJob = new AppliedJobModel({
+    ...jobData,
+    user: userId,
+  });
+
   return await appliedJob.save();
 };
 
-// Service to get all job applications
-export const fetchAllJobs = async () => {
-  return await AppliedJobModel.find();
+export const fetchUserAppliedJobs = async (userId: string) => {
+  return await AppliedJobModel.find({ user: userId });
 };
-
 /*
 // Service to get a job application by ID
 export const fetchJobById = async (jobId: string) => {

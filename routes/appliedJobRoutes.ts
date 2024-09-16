@@ -1,16 +1,16 @@
 import { Router } from 'express';
 import {
   createAppliedJob,
-  getAppliedJobs,
+  getUserAppliedJobs,
 } from '../controllers/appliedJobController';
 
 const router = Router();
 
 // Route to create a new job application
-router.post('/create', createAppliedJob);
+router.post('/', createAppliedJob);
 
 // Route to get all job applications
-router.get('/', getAppliedJobs);
+router.get('/', getUserAppliedJobs);
 /*
 // Route to get a specific job application by ID
 router.get('/applied-jobs/:id', getAppliedJobById);

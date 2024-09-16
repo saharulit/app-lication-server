@@ -1,4 +1,5 @@
 export interface IUser extends Document {
+  _id: string;
   firstName: string;
   lastName: string;
   email: string;
@@ -8,13 +9,16 @@ export interface IUser extends Document {
   comparePassword: (password: string) => Promise<boolean>;
 }
 export interface ICompany extends Document {
-  userId: string;
+  _id: string;
+  user: IUser;
   name: string;
   description?: string;
   logo?: string;
 }
 
 export interface IAppliedJob extends Document {
+  _id: string;
+  user: IUser;
   title: string;
   description?: string;
   company: ICompany;
