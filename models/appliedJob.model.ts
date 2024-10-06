@@ -6,7 +6,7 @@ const AppliedJobSchema = new Schema(
     user: { type: Schema.Types.ObjectId, ref: 'User', require: true },
     title: { type: String, required: true },
     description: { type: String },
-    // company: { type: Schema.Types.ObjectId, ref: 'Company', required: true },
+    company: { type: Schema.Types.ObjectId, ref: 'Company', required: true },
     applicationLink: { type: String },
     applicationDate: { type: Date },
     status: {
