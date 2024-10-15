@@ -4,8 +4,11 @@ import {
   createJobApplication,
   fetchUserAppliedJobs,
 } from '../services/appliedJobService';
-import { IUser } from '../models/type';
-import {createCompany, getCompaniesByUserId} from '../services/companyService';
+import { Filters, IUser, Status } from '../models/type';
+import {
+  createCompany,
+  getCompaniesByUserId,
+} from '../services/companyService';
 
 export const createAppliedJob = async (req: Request, res: Response) => {
   try {
@@ -17,25 +20,38 @@ export const createAppliedJob = async (req: Request, res: Response) => {
     }
     const authReq = req as Request & { user: IUser };
     const userId = authReq.user?.id;
-    const newApplication = {...req.body, company: companyId};
+    const newApplication = { ...req.body, company: companyId };
     const savedJob = await createJobApplication(newApplication, userId);
     res.status(201).json(savedJob);
   } catch (error) {
     res.status(500).json({ error: 'Failed to create job application' });
   }
 };
-
 export const getUserAppliedJobs = async (req: Request, res: Response) => {
   try {
     const authReq = req as Request & { user: IUser };
     const userId = authReq.user?.id;
-    const jobs = await fetchUserAppliedJobs(userId);
+
+    let filters: Filters = {
+      search: '',
+      status: []
+    };
+    
+    if (req.query) {
+      const search = req.query.search as string || '';
+      const statusQuery = req.query.status as string;
+      if (statusQuery) {
+        filters.status = statusQuery.split(',') as Status[];
+      }
+      filters.search = search;
+    }
+
+    const jobs = await fetchUserAppliedJobs(userId, filters);
     res.status(200).json(jobs);
   } catch (error) {
     res.status(500).json({ error: 'Failed to fetch job applications' });
   }
 };
-
 export const getUserCompanies = async (req: Request, res: Response) => {
   try {
     const authReq = req as Request & { user: IUser };
@@ -45,7 +61,7 @@ export const getUserCompanies = async (req: Request, res: Response) => {
   } catch (error) {
     res.status(500).json({ error: 'Failed to fetch companies by userId' });
   }
-}
+};
 
 /*
 // Get a single job application by ID

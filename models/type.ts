@@ -28,9 +28,14 @@ export interface IAppliedJob extends Document {
   comments?: string;
 }
 
+export interface Filters {
+  search?: string;
+  status?: Status[];
+}
+
 export enum Status {
-  APPLIED = 'Applied',
-  INTERVIEW = 'Interview',
-  REJECTED = 'Rejected',
-  HIRED = 'Hired',
+  APPLIED = 'applied',
+  INTERVIEW = 'interview',
+  REJECTED = 'rejected',
+  HIRED = 'hired',
 }

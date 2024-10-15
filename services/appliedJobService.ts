@@ -1,4 +1,5 @@
 import { AppliedJobModel } from '../models/appliedJob.model';
+import { Filters } from '../models/type';
 
 export const createJobApplication = async (jobData: any, userId: string) => {
   const appliedJob = new AppliedJobModel({
@@ -9,8 +10,24 @@ export const createJobApplication = async (jobData: any, userId: string) => {
   return await appliedJob.save();
 };
 
-export const fetchUserAppliedJobs = async (userId: string) => {
-  return await AppliedJobModel.find({ user: userId });
+export const fetchUserAppliedJobs = async (
+  userId: string,
+  filters?: Filters
+) => {
+  const query: any = { user: userId };
+
+  // Apply search term filter
+  if (filters?.search) {
+    query.$or = [
+      { title: { $regex: filters.search, $options: 'i' } },
+      { 'company.name': { $regex: filters.search, $options: 'i' } },
+    ];
+  }
+  if (filters?.status && filters.status.length > 0) {
+    query.status = { $in: filters.status };
+  }
+  console.log(query)
+  return await AppliedJobModel.find(query);
 };
 /*
 // Service to get a job application by ID
