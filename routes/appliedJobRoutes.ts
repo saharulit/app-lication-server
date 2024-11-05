@@ -1,6 +1,7 @@
 import { Router } from 'express';
 import {
   createAppliedJob,
+  getAppliedJobById,
   getUserAppliedJobs,
 } from '../controllers/appliedJobController';
 
@@ -11,10 +12,10 @@ router.post('/', createAppliedJob);
 
 // Route to get all job applications
 router.get('/', getUserAppliedJobs);
-/*
-// Route to get a specific job application by ID
-router.get('/applied-jobs/:id', getAppliedJobById);
 
+// Route to get a specific job application by ID
+router.get('/:id', getAppliedJobById);
+/*
 // Route to update a job application by ID
 router.put('/applied-jobs/:id', updateAppliedJob);
 

@@ -28,12 +28,12 @@ export const fetchUserAppliedJobs = async (
   }
   return await AppliedJobModel.find(query).populate('company');
 };
-/*
+
 // Service to get a job application by ID
 export const fetchJobById = async (jobId: string) => {
   return await AppliedJobModel.findById(jobId).populate('company');
 };
-
+/*
 // Service to update a job application by ID
 export const updateJobApplication = async (jobId: string, updateData: any) => {
   return await AppliedJobModel.findByIdAndUpdate(jobId, updateData, {

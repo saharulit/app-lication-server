@@ -5,6 +5,8 @@ import {
 } from '../services/appliedJobService';
 import { Filters, IUser, Status } from '../models/type';
 import { createCompany } from '../services/companyService';
+import { AppliedJobModel } from '../models/appliedJob.model';
+import { ObjectId } from 'mongodb';
 
 export const createAppliedJob = async (req: Request, res: Response) => {
   const authReq = req as Request & { user: IUser };
@@ -53,23 +55,39 @@ export const getUserAppliedJobs = async (req: Request, res: Response) => {
   }
 };
 
-/*
 // Get a single job application by ID
 export const getAppliedJobById = async (req: Request, res: Response) => {
+  const authReq = req as Request & { user: IUser };
+  const userId = authReq.user?.id;
+
+  if (!userId) {
+    return res.status(401).json({ error: 'Unauthorized: User ID is required' });
+  }
+
   try {
     const job = await AppliedJobModel.findById(req.params.id).populate(
       'company'
     );
-    if (job) {
-      res.status(200).json(job);
+
+    if (!job) {
+      return res.status(404).json({ error: 'Job application not found' });
+    }
+
+    if (job.user.toString() === userId.toString()) {
+      return res.status(200).json(job);
     } else {
-      res.status(404).json({ error: 'Job application not found' });
+      return res
+        .status(403)
+        .json({
+          error: 'Forbidden: You do not have access to this job application',
+        });
     }
   } catch (error) {
-    res.status(500).json({ error: 'Failed to fetch job application' });
+    console.error('Error fetching job application:', error);
+    return res.status(500).json({ error: 'Failed to fetch job application' });
   }
 };
-
+/*
 // Update a job application
 export const updateAppliedJob = async (req: Request, res: Response) => {
   try {
