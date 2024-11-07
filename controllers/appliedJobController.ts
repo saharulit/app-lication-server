@@ -1,25 +1,27 @@
 import { Request, Response } from 'express';
-import { AppliedJobModel } from '../models/appliedJob.model';
 import {
   createJobApplication,
   fetchUserAppliedJobs,
 } from '../services/appliedJobService';
 import { Filters, IUser, Status } from '../models/type';
-import {
-  createCompany,
-  getCompaniesByUserId,
-} from '../services/companyService';
+import { createCompany } from '../services/companyService';
+import { AppliedJobModel } from '../models/appliedJob.model';
+import { ObjectId } from 'mongodb';
 
 export const createAppliedJob = async (req: Request, res: Response) => {
+  const authReq = req as Request & { user: IUser };
+  const userId = authReq.user?.id;
   try {
     //search for company or create if not have one
     let companyId = req.body.company.id;
     if (!companyId) {
-      const company = await createCompany(req.body.company, req.body.userId);
-      companyId = company._id;
+      try {
+        const company = await createCompany(req.body.company, userId);
+        companyId = company._id;
+      } catch (error) {
+        res.status(500).json({ error: `Failed to create company ${error}` });
+      }
     }
-    const authReq = req as Request & { user: IUser };
-    const userId = authReq.user?.id;
     const newApplication = { ...req.body, company: companyId };
     const savedJob = await createJobApplication(newApplication, userId);
     res.status(201).json(savedJob);
@@ -34,11 +36,11 @@ export const getUserAppliedJobs = async (req: Request, res: Response) => {
 
     let filters: Filters = {
       search: '',
-      status: []
+      status: [],
     };
-    
+
     if (req.query) {
-      const search = req.query.search as string || '';
+      const search = (req.query.search as string) || '';
       const statusQuery = req.query.status as string;
       if (statusQuery) {
         filters.status = statusQuery.split(',') as Status[];
@@ -52,34 +54,40 @@ export const getUserAppliedJobs = async (req: Request, res: Response) => {
     res.status(500).json({ error: 'Failed to fetch job applications' });
   }
 };
-export const getUserCompanies = async (req: Request, res: Response) => {
-  try {
-    const authReq = req as Request & { user: IUser };
-    const userId = authReq.user?.id;
-    const companies = await getCompaniesByUserId(userId);
-    res.status(200).json(companies);
-  } catch (error) {
-    res.status(500).json({ error: 'Failed to fetch companies by userId' });
-  }
-};
 
-/*
 // Get a single job application by ID
 export const getAppliedJobById = async (req: Request, res: Response) => {
+  const authReq = req as Request & { user: IUser };
+  const userId = authReq.user?.id;
+
+  if (!userId) {
+    return res.status(401).json({ error: 'Unauthorized: User ID is required' });
+  }
+
   try {
     const job = await AppliedJobModel.findById(req.params.id).populate(
       'company'
     );
-    if (job) {
-      res.status(200).json(job);
+
+    if (!job) {
+      return res.status(404).json({ error: 'Job application not found' });
+    }
+
+    if (job.user.toString() === userId.toString()) {
+      return res.status(200).json(job);
     } else {
-      res.status(404).json({ error: 'Job application not found' });
+      return res
+        .status(403)
+        .json({
+          error: 'Forbidden: You do not have access to this job application',
+        });
     }
   } catch (error) {
-    res.status(500).json({ error: 'Failed to fetch job application' });
+    console.error('Error fetching job application:', error);
+    return res.status(500).json({ error: 'Failed to fetch job application' });
   }
 };
-
+/*
 // Update a job application
 export const updateAppliedJob = async (req: Request, res: Response) => {
   try {

@@ -5,8 +5,8 @@ import cors from 'cors';
 import cookieParser from 'cookie-parser';
 import appliedJobRoutes from './routes/appliedJobRoutes';
 import authenticationRoute from './routes/authenticationRoute';
-import protectedRoutes from './routes/protected.routes';
 import { authenticate } from './auth.middleware';
+import companyRoutes from './routes/companyRoutes';
 
 dotenv.config();
 
@@ -28,12 +28,12 @@ app.use(
     credentials: true,
   })
 );
-// app.set('trust proxy', true);
-// app.use('/api', protectedRoutes);
 
 // Routes
 app.use('/api/auth', authenticationRoute);
 app.use('/api/applied-jobs', authenticate, appliedJobRoutes);
+app.use('/api/companies', authenticate, companyRoutes);
+
 
 // Test route
 app.get('/', (req, res) => {

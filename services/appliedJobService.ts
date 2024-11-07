@@ -26,15 +26,14 @@ export const fetchUserAppliedJobs = async (
   if (filters?.status && filters.status.length > 0) {
     query.status = { $in: filters.status };
   }
-  console.log(query)
-  return await AppliedJobModel.find(query);
+  return await AppliedJobModel.find(query).populate('company');
 };
-/*
+
 // Service to get a job application by ID
 export const fetchJobById = async (jobId: string) => {
   return await AppliedJobModel.findById(jobId).populate('company');
 };
-
+/*
 // Service to update a job application by ID
 export const updateJobApplication = async (jobId: string, updateData: any) => {
   return await AppliedJobModel.findByIdAndUpdate(jobId, updateData, {
