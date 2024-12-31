@@ -7,6 +7,6 @@ export const searchCompanies = async (req: Request, res: Response) => {
     const companies = await searchCompanyLogo(query);
     res.status(200).json(companies);
   } catch (e) {
-    res.status(500).json({ error: 'Failed to fetch companies' });
+    res.status(500).json({ error: `Failed to fetch companies ${e}` });
   }
 };
