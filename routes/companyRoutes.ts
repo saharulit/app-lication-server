@@ -1,9 +1,9 @@
 import { Router } from "express";
-import { getUserCompanies } from "../controllers/companyController";
+import { searchCompanies } from "../controllers/companyController";
 
 
 const companyRoutes = Router();
 
-companyRoutes.get('/', getUserCompanies);
+companyRoutes.get('/', searchCompanies);
 
 export default companyRoutes;
