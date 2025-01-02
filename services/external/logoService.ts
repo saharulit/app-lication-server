@@ -25,7 +25,12 @@ export const searchCompanyLogo = async (query: string) => {
       }
     );
 
-    return response.data;
+    return response.data.map(
+      (company: { logo_url: string; domain: string }) => ({
+        ...company,
+        logo: company.logo_url,
+      })
+    );
   } catch (error) {
     console.error('Error fetching company logo:', error);
     throw new Error(`Error fetching company logo: ${error}`);
